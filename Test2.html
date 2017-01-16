@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>HW8</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+  
+  <style>
+	.ng-hide {
+		opacity: 0;
+	}
+	
+  </style>
+</head>
+
+<body ng-app="congress" ng-controller="congressCtrl">
+<div class="container">
+	<!-- top sunlight part-->
+	<div class = "row">
+		<div class = "col-sm-1">E</div>
+		<div class = "col-sm-11">Congress API</div>
+	</div>
+	<div class = "row">
+		<div class = "col-sm-2">
+			<ul class="nav nav-pills nav-stacked">
+			   <li>Legislators</li>
+			   <li>Bills</li>
+			   <li>Committees</li>
+			   <li>Favorites</li>
+			</ul>
+		</div>
+		<div class = "col-sm-10">
+			<table class="table">
+				<thead>
+				  <tr>
+					<th>Legislators</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  <tr>
+					<td>
+
+					<!-- carousel 1-->
+					
+						<div class="panel panel-default">
+							<div class="panel-heading" style = "padding: 0; margin: 0;">
+								<nav class="navbar navbar-default" style = "padding: 0; margin: 0;">
+								  <div class="container-fluid">	
+									<ul class="nav navbar-nav">
+									  <li ng-click="selState()"><a>By State</a></li>
+									  <li ng-click="selHouse()"><a>House</a></li>
+									  <li ng-click="selSenate()"><a>Senate</a></li>
+									</ul>
+								  </div>
+								</nav>
+							</div>
+							<div class="panel-body">
+								<!-- By State -->
+								<div class="panel panel-default" ng-show="legTabs.state">
+									<div class="panel-heading">
+										<div class = "container-fluid">
+											<span>Legislators By State</span>
+											<span style = "float: right;">
+												<div class="dropdown">
+												  <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
+												  <span class="caret"></span></button>
+												  <ul class="dropdown-menu">
+													<li><a>HTML</a></li><!-- repeat -->
+													
+												  </ul> 	
+												</div>
+											</span>
+										</div>
+									</div>
+									<div class="panel-body">
+										<table class = "table">
+											<thead>
+												<tr>
+													<th>Party</th>
+													<th>Name</th>
+													<th>Chamber</th>
+													<th>District</th>
+													<th>State</th>
+													<th></th>
+												  </tr>
+											</thead>
+											<tbody>
+												<tr ng-repeat="i in oneArray"><!-- repeat -->
+													<td><button type="button" class="btn btn-default">i</button></td>
+													<td><button type="button" class="btn btn-default">Default</button></td>
+													<td><button type="button" class="btn btn-default">Default</button></td>
+													<td><button type="button" class="btn btn-default">Default</button></td>
+													<td><button type="button" class="btn btn-default">Default</button></td>
+													<td><button type="button" class="btn btn-default">Default</button></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<!-- By House use ng-hide to hide -->
+								<div class="panel panel-default" ng-show="legTabs.house">
+									<div class="panel-heading">
+										<div class = "container-fluid">
+											<span>Legislators By House</span>
+											<span style = "float: right;">
+												<input type="text"><!-- ng-modal -->
+											</span>
+										</div>
+									</div>
+									<div class="panel-body">
+										<table class = "table">
+											<thead>
+												<tr>
+													<th>Party</th>
+													<th>Name</th>
+													<th>Chamber</th>
+													<th>District</th>
+													<th>State</th>
+													<th></th>
+												  </tr>
+											</thead>
+											<tbody>
+												<tr><!-- repeat -->
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+								
+								<!-- By Senate -->
+								<div class="panel panel-default" ng-show="legTabs.senate">
+									<div class="panel-heading">
+										<div class = "container-fluid">
+											<span>Legislators By Senate</span>
+											<span style = "float: right;">
+												<input type="text"><!-- ng-modal -->
+											</span>
+										</div>
+									</div>
+									<div class="panel-body">
+										<table class = "table">
+											<thead>
+												<tr>
+													<th>Party</th>
+													<th>Name</th>
+													<th>Chamber</th>
+													<th>District</th>
+													<th>State</th>
+													<th></th>
+												  </tr>
+											</thead>
+											<tbody>
+												<tr><!-- repeat -->
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+				
+						<!-- carousel 2-->
+						
+				
+					
+					</td>
+				  </tr>
+				  
+				</tbody>
+				
+				
+			 </table>
+		</div>
+	</div>
+</div>
+
+
+<script>
+var app = angular.module('congress', []);
+app.controller('congressCtrl', function($scope) {
+	//used in ng-show for tabs
+    $scope.legTabs = {state : true, house : false, senate : false }; 
+	$scope.selState = function(){
+		$scope.legTabs.state = true;
+		$scope.legTabs.house = false;
+		$scope.legTabs.senate = false;
+	};
+	$scope.selHouse = function(){
+		$scope.legTabs.state = false;
+		$scope.legTabs.house = true;
+		$scope.legTabs.senate = false;
+	}
+	$scope.selSenate = function(){
+		$scope.legTabs.state = false;
+		$scope.legTabs.house = false;
+		$scope.legTabs.senate = true;
+	}
+	$scope.number = 10;
+	$scope.oneArray = [1,2,3,4,5];
+	
+	
+	
+});
+</script>
+
+
+</body>
+</html>

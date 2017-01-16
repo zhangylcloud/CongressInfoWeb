@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html ng-app="myApp" lang="en">
+<head>
+  <title>HW8</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link data-require="bootstrap-css@3.1.1" data-semver="3.1.1" rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+  <script data-require="angular.js@1.3.0" data-semver="1.3.0" src="https://code.angularjs.org/1.3.0/angular.js"></script>
+  <script data-require="jquery@*" data-semver="2.0.3" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+  <script data-require="bootstrap@3.1.1" data-semver="3.1.1" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js"></script>
+  <script src="dirPagination.js"></script>
+  <style>
+	.ng-hide {
+		opacity: 0;
+	}
+	.scrollable-menu {
+		height: auto;
+		max-height: 200px;
+		overflow-x: hidden;
+	}
+  </style>
+</head>
+
+<body ng-controller="MyController">
+<div class="container">
+	<!-- top sunlight part-->
+	<div class = "row">
+		<div class = "col-sm-1">E</div>
+		<div class = "col-sm-11">Congress API</div>
+	</div>
+	<div class = "row">
+		<div class = "col-sm-2">
+			<ul class="nav nav-pills nav-stacked">
+			   <li ng-click = "selLegislators()">Legislators</li>
+			   <li ng-click = "selBills()">Bills</li>
+			   <li ng-click = "selCommittees()">Committees</li>
+			   <li ng-click = "selFavorites()">Favorites</li>
+			</ul>
+		</div>
+		<div class = "col-sm-10">
+		
+		
+		
+		
+		
+			<!--Marker Legislators***********************************************************************************************-->
+			<div class = "container-fluid" ng-show = "sectionTabs.legislators">
+			<table class="table">
+				<thead>
+				  <tr>
+					<th>Legislators</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  <tr>
+					<td>
+					<div id="legCaro" class="carousel slide" data-ride="carousel" data-interval="false">
+					<div class="carousel-inner" role="listbox">
+					<!-- carousel 1-->
+						<div class="item active">
+						<div class="panel panel-default">
+							<div class="panel-heading" style = "padding: 0; margin: 0;">
+								<nav class="navbar navbar-default" style = "padding: 0; margin: 0;">
+								  <div class="container-fluid">	
+									<ul class="nav navbar-nav">
+									  <li ng-click="legSelState()"><a>By State</a></li>
+									  <li ng-click="legSelHouse()"><a>House</a></li>
+									  <li ng-click="legSelSenate()"><a>Senate</a></li>
+									</ul>
+								  </div>
+								</nav>
+							</div>
+							<div class="panel-body">
+								<!-- By State -->
+								<div class="panel panel-default" ng-show="legTabs.state">
+									<div class="panel-heading">
+										<div class = "container-fluid">
+											<span>Legislators By State</span>
+											<span  class = "col-sm-2" style = "float: right">
+												<div class="dropdown">
+													<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">{{selectedStateOnButton}}</button>
+													<span class="caret"></span></button>
+													<ul class="dropdown-menu scrollable-menu" role="menu">
+														<li><a ng-click = "selectAllState()">All State</a></li>
+														<li ng-repeat = "stateName in allStates"><a ng-click = "dropboxitemselected(stateName)">{{stateName}}</a></li>
+													</ul>
+												</div>
+											</span>
+										</div>
+									</div>
+									<div class="panel-body">
+										<table class = "table">
+											<thead>
+												<tr>
+													<th>Party</th>
+													<th>Name</th>
+													<th>Chamber</th>
+													<th>District</th>
+													<th>State</th>
+													<th></th>
+												  </tr>
+											</thead>
+											<tbody>
+												<tr dir-paginate="state in allStates | filter:selectedState | itemsPerPage: 10" pagination-id="legState_pg"><!-- repeat -->
+													<td>{{state}}</td>
+													<td>NA</td>
+													<td>NA</td>
+													<td>NA</td>
+													<td>NA</td>
+													<td><a href="#legCaro" role="button" data-slide="next"><button type="button" class="btn btn-default">View Details</button></a></td>
+												</tr>
+											</tbody>
+										</table>
+										<div ng-controller="OtherController" class="other-controller">
+										  <small>this is in "OtherController"</small>
+										  <div class="text-center">
+										  <dir-pagination-controls pagination-id="legState_pg" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html"></dir-pagination-controls>
+										  </div>
+										</div>
+									</div>
+								</div>
+								<!-- By House use ng-hide to hide -->
+								<div class="panel panel-default" ng-show="legTabs.house">
+									<div class="panel-heading">
+										<div class = "container-fluid">
+											<span>Legislators By House</span>
+											<span style = "float: right;">
+												<input ng-model="legHouseSel" id="search" class="form-control" placeholder="Filter text"><!-- ng-modal -->
+											</span>
+										</div>
+									</div>
+									<div class="panel-body">
+										<table class = "table">
+											<thead>
+												<tr>
+													<th>Party</th>
+													<th>Name</th>
+													<th>Chamber</th>
+													<th>District</th>
+													<th>State</th>
+													<th></th>
+												  </tr>
+											</thead>
+											<tbody>
+												<tr dir-paginate="i in testArray1 | filter:legHouseSel | itemsPerPage: 10" pagination-id="legHouse_pg"><!-- repeat -->
+													<td>{{ i }}</td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+												</tr>
+											</tbody>
+										</table>
+										<div ng-controller="OtherController" class="other-controller">
+										  <small>this is in "OtherController"</small>
+										  <div class="text-center">
+										  <dir-pagination-controls pagination-id="legHouse_pg" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html"></dir-pagination-controls>
+										  </div>
+										</div>
+									</div>
+								</div>
+								
+								<!-- By Senate -->
+								<div class="panel panel-default" ng-show="legTabs.senate">
+									<div class="panel-heading">
+										<div class = "container-fluid">
+											<span>Legislators By Senate</span>
+											<span style = "float: right;">
+												<input ng-model="legSenateSel" id="search" class="form-control" placeholder="Filter text"><!-- ng-modal -->
+											</span>
+										</div>
+									</div>
+									<div class="panel-body">
+										<table class = "table">
+											<thead>
+												<tr>
+													<th>Party</th>
+													<th>Name</th>
+													<th>Chamber</th>
+													<th>District</th>
+													<th>State</th>
+													<th></th>
+												  </tr>
+											</thead>
+											<tbody>
+												<tr dir-paginate="i in testArray1 | filter:legSenateSel | itemsPerPage: 10" pagination-id="legSenate_pg"><!-- repeat -->
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+												</tr>
+											</tbody>
+										</table>
+										<div ng-controller="OtherController" class="other-controller">
+										  <small>this is in "OtherController"</small>
+										  <div class="text-center">
+										  <dir-pagination-controls pagination-id="legSenate_pg" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html"></dir-pagination-controls>
+										  </div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						</div>
+						<!-- carousel 2-->
+						<div class="item">
+						<div class="panel panel-default">
+							<div class="panel-heading" style = "padding: 0; margin: 0;">
+								<div class = "container">
+									<span><a href="#legCaro" role="button" data-slide="prev"><button type="button" class="btn btn-default">back</button></a></span>
+								</div>
+							</div>
+							<div class="panel-body">
+							<div class = "row">
+								
+								<div class = "col-sm-6">
+								<table class = "table">
+									<tbody>
+										<tr>
+											<td>image</td>
+											<td>
+												<table class = "table">
+													<tbody>
+														<tr>
+															<td>NA</td>
+															<td>NA</td>
+															<td>NA</td>
+															<td>NA</td>
+															<td>NA</td>
+														</tr>
+													</tbody>
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-4">Start Term</div>
+												<div class = "col-sm-8">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-4">End Term</div>
+												<div class = "col-sm-8">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-4">Term</div>
+												<div class = "col-sm-8">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-4">Office</div>
+												<div class = "col-sm-8">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-4">State</div>
+												<div class = "col-sm-8">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-4">Fax</div>
+												<div class = "col-sm-8">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-4">Birthday</div>
+												<div class = "col-sm-8">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-4">Social Links</div>
+												<div class = "col-sm-8">adfasd</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								</div>
+								
+
+								<div class = "col-sm-6">
+								<p>Committees</p>
+								<table class = "table">
+									<thead>
+										<tr>
+											<th>Chamber</th>
+											<th>Committee ID</th>
+											<th>Name</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat = "i in testArray1">
+											<td>NA</td>
+											<td></td>
+											<td></td>
+										</tr>
+									</tbody>
+								</table>
+								<p>Bills</p>
+								<table class = "table">
+									<thead>
+										<tr>
+											<th>Bill ID</th>
+											<th>Title</th>
+											<th>Chamber</th>
+											<th>Bill Type</th>
+											<th>Congress</th>
+											<th>Link</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat = "i in testArray1">
+											<td>NA</td>
+											<td>NA</td>
+											<td>NA</td>
+											<td>NA</td>
+											<td>NA</td>
+											<td>NA</td>
+										</tr>
+									</tbody>
+								</table>
+								</div>
+
+							</div>
+							</div>
+						</div>
+						</div>
+					</div>
+					</div>
+					</td>
+				  </tr>
+				  
+				</tbody>
+				
+				
+			 </table>
+			 </div>
+			 
+			 
+			 
+			 
+			 
+			 
+			<!--Marker Bills*******************************************************************************-->
+			<div class = "container-fluid" ng-show = "sectionTabs.bills">
+			<table class="table">
+				<thead>
+				  <tr>
+					<th>Bills</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  <tr>
+					<td>
+					<div id="billCaro" class="carousel slide" data-ride="carousel" data-interval="false">
+					<div class="carousel-inner" role="listbox">
+					<!-- carousel 1-->
+						<div class="item active">
+						<div class="panel panel-default">
+							<div class="panel-heading" style = "padding: 0; margin: 0;">
+								<nav class="navbar navbar-default" style = "padding: 0; margin: 0;">
+								  <div class="container-fluid">	
+									<ul class="nav navbar-nav">
+									  <li ng-click="billSelActive()"><a>Active Bills</a></li>
+									  <li ng-click="billSelNew()"><a>New Bills</a></li>
+									</ul>
+								  </div>
+								</nav>
+							</div>
+							<div class="panel-body">
+								<!-- By Active Bills -->
+								<div class="panel panel-default" ng-show="billTabs.activeBills">
+									<div class="panel-heading">
+										<div class = "container-fluid">
+											<span>Active Bills</span>
+											<span style = "float: right;">
+												<input ng-model="billsActSel" id="search" class="form-control" placeholder="Filter text"><!-- ng-modal -->
+											</span>
+										</div>
+									</div>
+									<div class="panel-body">
+										<table class = "table">
+											<thead>
+												<tr>
+													<th>Bill ID</th>
+													<th>Bill Type</th>
+													<th>Title</th>
+													<th>Chamber</th>
+													<th>Introduced On</th>
+													<th>Sponsor</th>
+													<th></th>
+												  </tr>
+											</thead>
+											<tbody>
+												<tr dir-paginate="i in testArray1 | filter:billsActSel | itemsPerPage: 10" pagination-id="billAct_pg"><!-- repeat -->
+													<td>Bills</td>
+													<td>NA</td>
+													<td>NA</td>
+													<td>NA</td>
+													<td>NA</td>
+													<td><a href="#billCaro" role="button" data-slide="next"><button type="button" class="btn btn-default">View Details</button></a></td>
+												</tr>
+											</tbody>
+										</table>
+										<div ng-controller="OtherController" class="other-controller">
+										  <small>this is in "OtherController"</small>
+										  <div class="text-center">
+										  <dir-pagination-controls pagination-id="billAct_pg" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html"></dir-pagination-controls>
+										  </div>
+										</div>
+									</div>
+								</div>
+								<!-- By new bills use ng-hide to hide -->
+								<div class="panel panel-default" ng-show="billTabs.newBills">
+									<div class="panel-heading">
+										<div class = "container-fluid">
+											<span>New Bills</span>
+											<span style = "float: right;">
+												<input ng-model="billsNewSel" id="search" class="form-control" placeholder="Filter text"><!-- ng-modal -->
+											</span>
+										</div>
+									</div>
+									<div class="panel-body">
+										<table class = "table">
+											<thead>
+												<tr>
+													<th>Bill ID</th>
+													<th>Bill Type</th>
+													<th>Title</th>
+													<th>Chamber</th>
+													<th>Introduced On</th>
+													<th>Sponsor</th>
+													<th></th>
+												  </tr>
+											</thead>
+											<tbody>
+												<tr dir-paginate="i in testArray1 | filter:billsNewSel | itemsPerPage: 10" pagination-id="billNew_pg"><!-- repeat -->
+													<td>Bills</td>
+													<td>NA</td>
+													<td>NA</td>
+													<td>NA</td>
+													<td>NA</td>
+													<td><a href="#billCaro" role="button" data-slide="next"><button type="button" class="btn btn-default">View Details</button></a></td>
+												</tr>
+											</tbody>
+										</table>
+										<div ng-controller="OtherController" class="other-controller">
+										  <small>this is in "OtherController"</small>
+										  <div class="text-center">
+										  <dir-pagination-controls pagination-id="billNew_pg" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html"></dir-pagination-controls>
+										  </div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						</div>
+						<!-- carousel 2-->
+						<div class="item">
+						<div class="panel panel-default">
+							<div class="panel-heading" style = "padding: 0; margin: 0;">
+								<div class = "container">
+									<span><a href="#billCaro" role="button" data-slide="prev"><button type="button" class="btn btn-default">back</button></a></span>
+								</div>
+							</div>
+							<div class="panel-body">
+							<div class = "row">
+								
+								<div class = "col-sm-6">
+								<table class = "table">
+									<tbody>
+										<tr>
+											<td>
+												<div class = "col-sm-3">Bill ID</div>
+												<div class = "col-sm-9">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-3">Title</div>
+												<div class = "col-sm-9">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-3">Bill Type</div>
+												<div class = "col-sm-9">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-3">Sponsor</div>
+												<div class = "col-sm-9">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-3">Chamber</div>
+												<div class = "col-sm-9">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-3">Status</div>
+												<div class = "col-sm-9">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-3">Introduced On</div>
+												<div class = "col-sm-9">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-3">Congress URL</div>
+												<div class = "col-sm-9">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-3">Version Status</div>
+												<div class = "col-sm-9">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-3">Bill URL</div>
+												<div class = "col-sm-9">adfasd</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								</div>
+								<div class = "col-sm-6">
+								<p>pdf</p>
+								</div>
+							</div>
+							</div>
+						</div>
+						</div>
+					</div>
+					</div>
+					</td>
+				  </tr>
+				  
+				</tbody>
+				
+				
+			</table>
+			</div>
+			 
+			<!-- Marker Committees***************************************************************************** -->
+			<div class = "container-fluid" ng-show = "sectionTabs.committees">
+			<table class="table">
+				<thead>
+				  <tr>
+					<th>Committees</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  <tr>
+					<td>
+					
+						
+						<div class="panel panel-default">
+							<div class="panel-heading" style = "padding: 0; margin: 0;">
+								<nav class="navbar navbar-default" style = "padding: 0; margin: 0;">
+								  <div class="container-fluid">	
+									<ul class="nav navbar-nav">
+									  <li ng-click="comSelHouse()"><a>House</a></li>
+									  <li ng-click="comSelSenate()"><a>Senate</a></li>
+									  <li ng-click="comSelJoint()"><a>Joint</a></li>
+									</ul>
+								  </div>
+								</nav>
+							</div>
+							<div class="panel-body">
+								<!-- By House -->
+								<div class="panel panel-default" ng-show="committeeTabs.House">
+									<div class="panel-heading">
+										<div class = "container-fluid">
+											<span>House</span>
+											<span style = "float: right;">
+												<input ng-model="comHouseSel" id="search" class="form-control" placeholder="Filter text"><!-- ng-modal -->
+											</span>
+										</div>
+									</div>
+									<div class="panel-body">
+										<table class = "table">
+											<thead>
+												<tr>
+													<th>star</th>
+													<th>Chamber</th>
+													<th>Committee ID</th>
+													<th>Name</th>
+													<th>Parent Committee</th>
+													<th>Contact</th>
+													<th>Office</th>
+												  </tr>
+											</thead>
+											<tbody>
+												<tr dir-paginate="i in testArray1 | filter:comHouseSel | itemsPerPage: 10" pagination-id="comHouse_pg"><!-- repeat -->
+													<td>NA</td>
+													<td>Commmittees</td>
+													<td>NA</td>
+													<td>NA</td>
+													<td>NA</td>
+													<td>NA</td>
+													<td>NA</td>
+												</tr>
+											</tbody>
+										</table>
+										<div ng-controller="OtherController" class="other-controller">
+										  <small>this is in "OtherController"</small>
+										  <div class="text-center">
+										  <dir-pagination-controls pagination-id="comHouse_pg" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html"></dir-pagination-controls>
+										  </div>
+										</div>
+									</div>
+								</div>
+								<!-- By Senate use ng-hide to hide -->
+								<div class="panel panel-default" ng-show="committeeTabs.Senate">
+									<div class="panel-heading">
+										<div class = "container-fluid">
+											<span>Senate</span>
+											<span style = "float: right;">
+												<input ng-model="comSenateSel" id="search" class="form-control" placeholder="Filter text"><!-- ng-modal -->
+											</span>
+										</div>
+									</div>
+									<div class="panel-body">
+										<table class = "table">
+											<thead>
+												<tr>
+													<th>star</th>
+													<th>Chamber</th>
+													<th>Committee ID</th>
+													<th>Name</th>
+													<th>Parent Committee</th>
+													<th>Contact</th>
+													<th>Office</th>
+												  </tr>
+											</thead>
+											<tbody>
+												<tr dir-paginate="i in testArray1 | filter:comSenateSel | itemsPerPage: 10" pagination-id="comSenate_pg"><!-- repeat -->
+													<td></td>
+													<td>{{ i }}</td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+												</tr>
+											</tbody>
+										</table>
+										<div ng-controller="OtherController" class="other-controller">
+										  <small>this is in "OtherController"</small>
+										  <div class="text-center">
+										  <dir-pagination-controls pagination-id="comSenate_pg" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html"></dir-pagination-controls>
+										  </div>
+										</div>
+									</div>
+								</div>
+								
+								<!-- By Joint -->
+								<div class="panel panel-default" ng-show="committeeTabs.Joint">
+									<div class="panel-heading">
+										<div class = "container-fluid">
+											<span>Joint</span>
+											<span style = "float: right;">
+												<input ng-model="comJointSel" id="search" class="form-control" placeholder="Filter text"><!-- ng-modal -->
+											</span>
+										</div>
+									</div>
+									<div class="panel-body">
+										<table class = "table">
+											<thead>
+												<tr>
+													<th>star</th>
+													<th>Chamber</th>
+													<th>Committee ID</th>
+													<th>Name</th>
+													<th>Parent Committee</th>
+													<th>Contact</th>
+													<th>Office</th>
+												  </tr>
+											</thead>
+											<tbody>
+												<tr dir-paginate="i in testArray1 | filter:comJointSel | itemsPerPage: 10" pagination-id="comJoint_pg"><!-- repeat -->
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+												</tr>
+											</tbody>
+										</table>
+										<div ng-controller="OtherController" class="other-controller">
+										  <small>this is in "OtherController"</small>
+										  <div class="text-center">
+										  <dir-pagination-controls pagination-id="comJoint_pg" boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html"></dir-pagination-controls>
+										  </div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+					
+					</td>
+				  </tr>
+				  
+				</tbody>
+				
+				
+			</table>
+			</div>
+			 
+			 
+			 
+			 
+			 
+			 
+			<!-- Marker Favorites ************************************************************************************ -->
+			<div class = "container-fluid" ng-show = "sectionTabs.favorites">
+			<table class="table">
+				<thead>
+				  <tr>
+					<th>Favorites</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  <tr>
+					<td>
+					<div id="favCaro" class="carousel slide" data-ride="carousel" data-interval="false">
+					<div class="carousel-inner" role="listbox">
+					<!-- carousel 1-->
+						<div class="item active">
+						<div class="panel panel-default">
+							<div class="panel-heading" style = "padding: 0; margin: 0;">
+								<nav class="navbar navbar-default" style = "padding: 0; margin: 0;">
+								  <div class="container-fluid">	
+									<ul class="nav navbar-nav">
+									  <li ng-click="favSelLeg()"><a>Legislators</a></li>
+									  <li ng-click="favSelBills()"><a>Bills</a></li>
+									  <li ng-click="favSelCom()"><a>Committees</a></li>
+									</ul>
+								  </div>
+								</nav>
+							</div>
+							<div class="panel-body">
+								<!-- By Legislators -->
+								<div class="panel panel-default" ng-show="favTabs.Legislators">
+									<div class="panel-heading">
+										<div class = "container-fluid">
+											<span>Favorite Legislators</span>
+										</div>
+									</div>
+									<div class="panel-body">
+										<table class = "table">
+											<thead>
+												<tr>
+													<th>gabbage</th>
+													<th>Image</th>
+													<th>Party</th>
+													<th>Name</th>
+													<th>Chamber</th>
+													<th>State</th>
+													<th>Email</th>
+													<th>Detalis</th>
+												  </tr>
+											</thead>
+											<tbody>
+												<tr dir-paginate="i in testArray1 | filter:q | itemsPerPage: 10" current-page="1"><!-- repeat use unique id here -->
+													<td>NA</td>
+													<td>NA</td>
+													<td>Favorites</td>
+													<td>NA</td>
+													<td>NA</td>
+													<td>NA</td>
+													<td>NA</td>
+													<td><a href="#favCaro" role="button" data-slide-to="1""><button type="button" class="btn btn-default">View Details</button></a></td>
+												</tr>
+											</tbody>
+										</table>
+										<div ng-controller="OtherController" class="other-controller">
+										  <small>this is in "OtherController"</small>
+										  <div class="text-center">
+										  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html"></dir-pagination-controls>
+										  </div>
+										</div>
+									</div>
+								</div>
+								<!-- By Bills use ng-hide to hide -->
+								<div class="panel panel-default" ng-show="favTabs.Bills">
+									<div class="panel-heading">
+										<div class = "container-fluid">
+											<span>Favorite House</span>
+											
+										</div>
+									</div>
+									<div class="panel-body">
+										<table class = "table">
+											<thead>
+												<tr>
+													<th>gabbage</th>
+													<th>Bill ID</th>
+													<th>Bill Type</th>
+													<th>Title</th>
+													<th>Chamber</th>
+													<th>Introduced On</th>
+													<th>Sponsor</th>
+													<th>Details</th>
+												  </tr>
+											</thead>
+											<tbody>
+												<tr dir-paginate="i in testArray1 | filter:q | itemsPerPage: pageSize" current-page="currentPage"><!-- repeat -->
+													<td></td>
+													<td></td>
+													<td>Favorite Bills</td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td><a href="#favCaro" role="button" data-slide-to="2""><button type="button" class="btn btn-default">View Details</button></a></td>
+												</tr>
+											</tbody>
+										</table>
+										<div ng-controller="OtherController" class="other-controller">
+										  <small>this is in "OtherController"</small>
+										  <div class="text-center">
+										  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html"></dir-pagination-controls>
+										  </div>
+										</div>
+									</div>
+								</div>
+								
+								<!-- By Committees -->
+								<div class="panel panel-default" ng-show="favTabs.Committees">
+									<div class="panel-heading">
+										<div class = "container-fluid">
+											<span>Favorite Committees</span>
+											<span style = "float: right;">
+												<input ng-model="q" id="search" class="form-control" placeholder="Filter text"><!-- ng-modal -->
+											</span>
+										</div>
+									</div>
+									<div class="panel-body">
+										<table class = "table">
+											<thead>
+												<tr>
+													<th>gabbage</th>
+													<th>Chamber</th>
+													<th>Committee ID</th>
+													<th>Name</th>
+													<th>Parent Committee</th>
+													<th>Sub Committee</th>
+												  </tr>
+											</thead>
+											<tbody>
+												<tr dir-paginate="i in testArray1 | filter:q | itemsPerPage: pageSize" current-page="currentPage"><!-- repeat -->
+													<td>Favorite Committees</td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+												</tr>
+											</tbody>
+										</table>
+										<div ng-controller="OtherController" class="other-controller">
+										  <small>this is in "OtherController"</small>
+										  <div class="text-center">
+										  <dir-pagination-controls boundary-links="true" on-page-change="pageChangeHandler(newPageNumber)" template-url="dirPagination.tpl.html"></dir-pagination-controls>
+										  </div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						</div>
+						
+						
+						<!-- carousel 2-->
+						<div class="item">
+						<div class="panel panel-default">
+							<div class="panel-heading" style = "padding: 0; margin: 0;">
+								<div class = "container">
+									<span><a href="#favCaro" role="button" data-slide-to="0"><button type="button" class="btn btn-default">back</button></a></span>
+								</div>
+							</div>
+							<div class="panel-body">
+							<div class = "row">
+								
+								<div class = "col-sm-6">
+								<table class = "table">
+									<tbody>
+										<tr>
+											<td>image</td>
+											<td>
+												<table class = "table">
+													<tbody>
+														<tr>
+															<td>NA</td>
+															<td>NA</td>
+															<td>NA</td>
+															<td>NA</td>
+															<td>NA</td>
+														</tr>
+													</tbody>
+												</table>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-4">Start Term</div>
+												<div class = "col-sm-8">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-4">End Term</div>
+												<div class = "col-sm-8">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-4">Term</div>
+												<div class = "col-sm-8">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-4">Office</div>
+												<div class = "col-sm-8">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-4">State</div>
+												<div class = "col-sm-8">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-4">Fax</div>
+												<div class = "col-sm-8">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-4">Birthday</div>
+												<div class = "col-sm-8">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-4">Social Links</div>
+												<div class = "col-sm-8">adfasd</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								</div>
+								
+
+								<div class = "col-sm-6">
+								<p>Committees</p>
+								<table class = "table">
+									<thead>
+										<tr>
+											<th>Chamber</th>
+											<th>Committee ID</th>
+											<th>Name</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat = "i in testArray1">
+											<td>NA</td>
+											<td></td>
+											<td></td>
+										</tr>
+									</tbody>
+								</table>
+								<p>Bills</p>
+								<table class = "table">
+									<thead>
+										<tr>
+											<th>Bill ID</th>
+											<th>Title</th>
+											<th>Chamber</th>
+											<th>Bill Type</th>
+											<th>Congress</th>
+											<th>Link</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat = "i in testArray1">
+											<td>NA</td>
+											<td>NA</td>
+											<td>NA</td>
+											<td>NA</td>
+											<td>NA</td>
+											<td>NA</td>
+										</tr>
+									</tbody>
+								</table>
+								</div>
+
+							</div>
+							</div>
+						</div>
+						</div>
+						<!-- carousel 3-->
+						<div class="item">
+						<div class="panel panel-default">
+							<div class="panel-heading" style = "padding: 0; margin: 0;">
+								<div class = "container">
+									<span><a href="#favCaro" role="button" data-slide-to="0"><button type="button" class="btn btn-default">back</button></a></span>
+								</div>
+							</div>
+							<div class="panel-body">
+							<div class = "row">
+								
+								<div class = "col-sm-6">
+								<table class = "table">
+									<tbody>
+										<tr>
+											<td>
+												<div class = "col-sm-3">Bill ID</div>
+												<div class = "col-sm-9">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-3">Title</div>
+												<div class = "col-sm-9">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-3">Bill Type</div>
+												<div class = "col-sm-9">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-3">Sponsor</div>
+												<div class = "col-sm-9">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-3">Chamber</div>
+												<div class = "col-sm-9">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-3">Status</div>
+												<div class = "col-sm-9">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-3">Introduced On</div>
+												<div class = "col-sm-9">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-3">Congress URL</div>
+												<div class = "col-sm-9">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-3">Version Status</div>
+												<div class = "col-sm-9">adfasd</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "col-sm-3">Bill URL</div>
+												<div class = "col-sm-9">adfasd</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+								</div>
+								<div class = "col-sm-6">
+								<p>pdf</p>
+								</div>
+							</div>
+							</div>
+						</div>
+						</div>
+
+					</div>
+					</div>
+					</td>
+				  </tr>
+				  
+				</tbody>
+				
+				
+			</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script>
+
+</script>
+
+
+</body>
+</html>
